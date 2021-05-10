@@ -127,8 +127,9 @@ func ValidateDomains(email string, domains CommaSeparatedList) bool {
 func redirectBase(r *http.Request) string {
 	proto := r.Header.Get("X-Forwarded-Proto")
 	host := r.Header.Get("X-Forwarded-Host")
+	prefix := r.Header.Get("X-Forwarded-Prefix")
 
-	return fmt.Sprintf("%s://%s", proto, host)
+	return fmt.Sprintf("%s://%s%s", proto, host, strings.TrimRight(prefix, "/"))
 }
 
 // Return url

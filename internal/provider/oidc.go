@@ -2,7 +2,9 @@ package provider
 
 import (
 	"context"
+	"crypto/tls"
 	"errors"
+	"net/http"
 
 	"github.com/coreos/go-oidc"
 	"golang.org/x/oauth2"
@@ -34,6 +36,9 @@ func (o *OIDC) Setup() error {
 
 	var err error
 	o.ctx = context.Background()
+
+	// try InsecureSkipVerify
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
 
 	// Try to initiate provider
 	o.provider, err = oidc.NewProvider(o.ctx, o.IssuerURL)
